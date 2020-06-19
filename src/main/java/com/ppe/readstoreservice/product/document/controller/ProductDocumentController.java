@@ -3,6 +3,8 @@ package com.ppe.readstoreservice.product.document.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,18 +15,28 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.ppe.readstoreservice.product.document.entity.ProductMongoEntity;
 import com.ppe.readstoreservice.product.document.model.Product;
 import com.ppe.readstoreservice.product.document.repository.ProductMongoRepository;
 
 @RestController
 public class ProductDocumentController {
+	
+	private final Logger logger = LoggerFactory.getLogger(ProductDocumentController.class);
+	
+	
 	@Autowired
 	private ProductMongoRepository productMongoRepository;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
 	
+	/**
+	 * This API returns the list of products 
+	 * 
+	 * @return
+	 */
 	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping("/products")
 	public List<Product> getProducts() {
@@ -36,18 +48,24 @@ public class ProductDocumentController {
 			try {
 				 product = objectMapper.readValue(productMongo.getDetail(), Product.class);
 
-			} catch (JsonProcessingException e) { // TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (JsonProcessingException e) { 
+				throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			return product;
 		}).collect(Collectors.toList());
 
-		if (products == null || products.size() == 0)
-			System.out.println("empty");
-		products.stream().forEach(product-> System.out.println(product.toString()));
+
+		products.stream().forEach(product-> logger.info(product.toString()));
 		return products;
 	}
 	
+	/**
+	 * 
+	 * This API returns the details of a product
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping("/products/{id}")
 	public Product getProduct(@PathVariable("id") long id) {
