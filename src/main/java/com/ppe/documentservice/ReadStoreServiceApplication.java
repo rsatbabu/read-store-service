@@ -1,4 +1,4 @@
-package com.ppe.readstoreservice;
+package com.ppe.documentservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

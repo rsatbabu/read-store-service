@@ -1,4 +1,4 @@
-package com.ppe.readstoreservice.product.document.model;
+package com.ppe.documentservice.product.model;
 
 import lombok.Data;
 

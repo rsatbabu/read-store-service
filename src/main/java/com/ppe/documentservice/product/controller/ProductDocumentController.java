@@ -1,4 +1,4 @@
-package com.ppe.readstoreservice.product.document.controller;
+package com.ppe.documentservice.product.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,10 +15,9 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.ppe.readstoreservice.product.document.entity.ProductMongoEntity;
-import com.ppe.readstoreservice.product.document.model.Product;
-import com.ppe.readstoreservice.product.document.repository.ProductMongoRepository;
+import com.ppe.documentservice.product.entity.ProductDocumentEntity;
+import com.ppe.documentservice.product.model.Product;
+import com.ppe.documentservice.product.repository.ProductDocumentRepository;
 
 @RestController
 public class ProductDocumentController {
@@ -27,7 +26,7 @@ public class ProductDocumentController {
 	
 	
 	@Autowired
-	private ProductMongoRepository productMongoRepository;
+	private ProductDocumentRepository productMongoRepository;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -41,7 +40,7 @@ public class ProductDocumentController {
 	@RequestMapping("/products")
 	public List<Product> getProducts() {
 
-		List<ProductMongoEntity> productsMongo = productMongoRepository.findAll();
+		List<ProductDocumentEntity> productsMongo = productMongoRepository.findAll();
 
 		List<Product> products = productsMongo.stream().map(productMongo -> {
 			Product product = null;
@@ -69,7 +68,7 @@ public class ProductDocumentController {
 	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping("/products/{id}")
 	public Product getProduct(@PathVariable("id") long id) {
-		ProductMongoEntity productMongo = productMongoRepository.findById(id);
+		ProductDocumentEntity productMongo = productMongoRepository.findById(id);
 		Product product = null;
 		try {
 			 product = objectMapper.readValue(productMongo.getDetail(), Product.class);
