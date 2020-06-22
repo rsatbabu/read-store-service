@@ -20,6 +20,7 @@ import com.ppe.documentservice.product.model.Product;
 import com.ppe.documentservice.product.repository.ProductDocumentRepository;
 
 @RestController
+@RequestMapping("/shopping-products")
 public class ProductDocumentController {
 	
 	private final Logger logger = LoggerFactory.getLogger(ProductDocumentController.class);
@@ -36,7 +37,7 @@ public class ProductDocumentController {
 	 * 
 	 * @return
 	 */
-	@CrossOrigin(origins = "*", maxAge = 3600)
+
 	@RequestMapping("/products")
 	public List<Product> getProducts() {
 
@@ -65,7 +66,7 @@ public class ProductDocumentController {
 	 * @param id
 	 * @return
 	 */
-	@CrossOrigin(origins = "*", maxAge = 3600)
+	//@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping("/products/{id}")
 	public Product getProduct(@PathVariable("id") long id) {
 		ProductDocumentEntity productMongo = productMongoRepository.findById(id);
